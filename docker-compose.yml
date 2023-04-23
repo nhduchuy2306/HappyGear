@@ -1,0 +1,34 @@
+version: '3'
+services:
+  mysql:
+    container_name: mysql
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: happygear
+      MYSQL_DATABASE: happygear
+    volumes:
+       - mysql:/data/mysql
+    ports:
+      - "3306:3306"
+
+  api-server:
+    container_name: api-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    restart: unless-stopped
+  
+  nginx:
+    build: 
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+     - "8081:80"
+volumes:
+  mysql:
+  nginx:
+  api-server:

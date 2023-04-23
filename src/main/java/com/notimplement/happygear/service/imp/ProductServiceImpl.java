@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,6 +55,14 @@ public class ProductServiceImpl implements ProductService{
 		Map<List<ProductDto>, Integer> pair = new HashMap<List<ProductDto>, Integer>();
 		Page<Product> pageList = repo.findAllProductWithFilter(brandId,categoryId,fromPrice,toPrice, pageable);
 		pair.put(pageList.stream().map(ProductMapper::toProductDto).collect(Collectors.toList()), pageList.getTotalPages());
+		return pair;
+	}
+	
+	@Override
+	public Map<List<ProductDto>, Long> listByPageAndName(String productName, Pageable pageable) {
+		Map<List<ProductDto>, Long> pair = new HashMap<List<ProductDto>, Long>();
+		Page<Product> pageList = repo.findByProductNameContaining(productName, pageable);
+		pair.put(pageList.stream().map(ProductMapper::toProductDto).collect(Collectors.toList()), pageList.getTotalElements());
 		return pair;
 	}
 
@@ -123,5 +130,12 @@ public class ProductServiceImpl implements ProductService{
 	private Brand getBrandById(Integer id) {
 		return brandRepo.findById(id).get();
 	}
+	
+	public Long totalProduct() {
+		Long total = repo.count();
+		return total;
+	}
+
+	
 	
 }

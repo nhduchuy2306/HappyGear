@@ -21,8 +21,10 @@ public class OrderApi {
 
     @Autowired
     OrderService orderService;
+
     @Autowired
     OrderDetailService orderDetailService;
+
     @Autowired
     UserService userService;
 
@@ -55,7 +57,7 @@ public class OrderApi {
                     .body("The quantity is not enough");
         }
         if(userDto!=null){
-            orderDto.setUserName(userDto.getUserName());
+            orderDto.setUserName(userDto.getUsername());
             orderDto.setDate(Date.valueOf(java.time.LocalDate.now()));
             orderDto.setTotal(total);
             orderDto.setStatus(1);
@@ -71,7 +73,7 @@ public class OrderApi {
                 orderDetailDto.setProductId(item.getProductId());
                 orderDetailService.create(orderDetailDto);
             });
-            log.info("User with username: " + userDto.getUserName());
+            log.info("User with username: " + userDto.getUsername());
         }
         else{
             log.info("User is not exist");
