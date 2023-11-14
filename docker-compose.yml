@@ -11,6 +11,17 @@ services:
     ports:
       - "3306:3306"
 
+  sql-server:
+    container_name: sql-server
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      SA_PASSWORD: SA@12345
+      ACCEPT_EULA: Y
+    volumes:
+      - sql-server:/data/sql-server
+    ports:
+      - "1433:1433"
+
   api-server:
     container_name: api-server
     build:
@@ -28,12 +39,8 @@ services:
       dockerfile: Dockerfile.nginx
     ports:
      - "8081:80"
-  # certbot:
-  #   image: certbot/certbot:latest
-  #   volumes:
-  #     - ./certbot/www/:/var/www/certbot/:rw
-  #     - ./certbot/certs/:/etc/letsencrypt/:rw
 volumes:
   mysql:
+  sql-server:
   nginx:
   api-server:
